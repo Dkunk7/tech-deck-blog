@@ -7,7 +7,8 @@
     padding: 0;
     margin: 0;
     font-family: sans-serif;
-    color: #333;
+    color: white;
+    background-color: #717777;
   }
   
   a {
@@ -80,15 +81,24 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 1%;
+    background-color: #4e5353;
   }
   
-  header h1 {
+  header h1 a{
     font-size: 1em;
+    color: #34ebdc;
+  }
+
+  header h1 a:hover {
+    color:  #23b696;
   }
   
   main {
     flex: 1;
     padding: 2% 4%;
+  }
+  h2 {
+    color: rgb(91, 230, 255);
   }
   
   .btn-no-style {
@@ -127,6 +137,9 @@
     font-size: 90%;
     color: #7d7d7d;
   }
+  .title {
+    color: #34ebdc;
+  }
   
   .edit-link {
     display: block;
@@ -144,13 +157,16 @@
   }
   
   .comment:nth-child(odd) {
-    background-color: #fff5eb;
+    background-color: #4e5353;
   }
   
   .comment .meta {
     font-size: 90%;
     margin-bottom: .5%;
     opacity: .6;
+  }
+  .meta {
+    color: rgb(179, 183, 187);
   }
   
   .new-post-form input {

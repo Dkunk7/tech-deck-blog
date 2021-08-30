@@ -1,8 +1,10 @@
 <article class="post">
     <div class="title">
-        <a href="{{post_url}}" target="_blank">{{title}}</a>
-        <span>({{format_url post_url}})</span>
+        {{title}}
+        {{!-- <span>({{format_url post_url}})</span> --}}
+        {{!-- {{post_content}} --}}
     </div>
+    <div class="post-text">{{post_content}}</div>
     <div class="meta">
         Posted by {{user.username}} on
         {{format_date created_at}}

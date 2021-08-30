@@ -1,6 +1,6 @@
 const router = require(`express`).Router();
 const { User, Post, Comment } = require(`../../models`);
-const withAuth = require(`../../utils/auth`);
+// const withAuth = require(`../../utils/auth`);
 
 // GET /api/users
 router.get(`/`, (req, res) => {
@@ -19,6 +19,9 @@ router.get(`/`, (req, res) => {
 router.get(`/:id`, (req, res) => {
     User.findOne({
         attributes: { exclude: [`password`] },
+        where: {
+            id: req.params.id
+        },
         include: [
             {
                 model: Post,
@@ -33,9 +36,6 @@ router.get(`/:id`, (req, res) => {
                 }
             },
         ],
-        where: {
-            id: req.params.id
-        }
     })
         .then(dbUserData => {
             if (!dbUserData) {
@@ -51,7 +51,7 @@ router.get(`/:id`, (req, res) => {
 });
 
 // POST /api/users
-router.post(`/`, /*withAuth,*/ (req, res) => {
+router.post(`/`, (req, res) => {
     // expects {username: `example`, email: `example@email.com`, password: `example123`}
     User.create({
         username: req.body.username,
@@ -65,7 +65,7 @@ router.post(`/`, /*withAuth,*/ (req, res) => {
                 req.session.loggedIn = true;
 
                 res.json(dbUserData);
-            })
+            });
             
         })
         .catch(err => {
@@ -111,8 +111,19 @@ router.post(`/login`, (req, res) => {
     });
 });
 
+
+router.post(`/logout`, (req, res) => {
+    if (req.session.loggedIn) {
+        req.session.destroy(() => {
+            res.status(204).end();
+        });
+    } else {
+        res.status(404).end();
+    }
+});
+
 // PUT /api/users/1
-router.put(`/:id`, withAuth, (req, res) => {
+router.put(`/:id`, (req, res) => {
     // expects {username: `example`, email: `example@email.com`, password: `example123`}
 
     // if req.body has exact key/value pairs to match the model, you can just use `req.body` instead
@@ -136,7 +147,7 @@ router.put(`/:id`, withAuth, (req, res) => {
 });
 
 // DELETE /api/users/1
-router.delete(`/:id`, withAuth, (req, res) => {
+router.delete(`/:id`, (req, res) => {
     User.destroy({
         where: {
             id: req.params.id
@@ -154,16 +165,5 @@ router.delete(`/:id`, withAuth, (req, res) => {
             res.status(500).json(err);
         });
 });
-
-router.post(`/logout`, withAuth, (req, res) => {
-    if (req.session.loggedIn) {
-        req.session.destroy(() => {
-            res.status(204).end();
-        });
-    } else {
-        res.status(404).end();
-    }
-});
-
 
 module.exports = router;
